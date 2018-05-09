@@ -5,7 +5,9 @@ const mongoClient = mongodb.MongoClient;
 module.exports = async config => {
   const { dbUser, dbPass, dbHost, dbPort, dbName } = config;
   const connString = `mongodb://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbName}`;
-  const db = await mongoClient.connect(connString);
+  const client = await mongoClient.connect(connString);
+  const db = client.db(dbName);
+  
   return {
     list: async modelName => {
       return await db.collection( modelName ).find().toArray();
